@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+  <head>
+ 
+	 <style>
+	 body { 
+	 background-image: url("./fondo.gif"); 
+	  background-repeat: no-repeat;
+	   background-size: 100% ;
+	 }
+	#stage{
+	border: 1px  black solid;
+	margin-left: 12%;
+	position: absolute;
+	height: 34em;
+	width: 64em;
+
+	}
+	.block.lifes0{
+	 display: inline-block;
+	  height: 50px;
+	  width: 200px;
+	  margin: 2px;
+	   visibility: hidden;
+     }
+
+	.block.lifes1{
+	  display: inline-block;
+       background-color: blue;
+	   height: 50px;
+	   width: 200px;
+	   margin: 2px;
+     }
+	 
+    .block.lifes2{
+	  display: inline-block;
+       background-color: orange;
+	   height: 50px;
+	   width: 200px;
+	   margin: 2px;
+     }
+	 
+	 #player{
+       
+	   height: 20px;
+	   width: 174px;
+	   position: absolute;
+	   bottom: 0px; 
+	   left: 400px;
+	   border: 1px  black solid;
+     }
+	 
+	  #ball{
+	   
+     
+	   height: 20px;
+	   width: 20px;
+	   position:absolute;
+		display:block;
+	   bottom: 20px; 
+	   left: 475px;
+	   
+     }
+	 
+	 
+	.block.lifes3{
+	 display: inline-block;
+       background-color: green;
+	   height: 50px;
+	   width: 200px;
+	   margin: 2px;
+     }
+	 .jugador{
+	  height: 20px;
+	  width: 174px;
+	 
+	 }
+	.pelota{
+	border-radius:250px;
+	 height: 20px;
+	   width: 20px;
+	 
+	 }
+	 
+	 
+    </style>
+	 </head>
+	<body >
+	<div id ="stage">
+	<div id="ball"><img class="pelota" src="./pelota.png"/ > </div>
+	<div id="player"><img class="jugador" src="./player.png"/> </div>
+	</div>
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"  crossorigin="anonymous"></script>
+	
+	<script type="text/javascript">
+	
+	
+	var stages =[[{life:(Math.floor(Math.random()*4))},
+					 {life:(Math.floor(Math.random()*4))},
+					  {life:(Math.floor(Math.random()*4))},
+					   {life:(Math.floor(Math.random()*4))},
+					 {life:(Math.floor(Math.random()*4))}],
+					[{life:(Math.floor(Math.random()*4))},
+					 {life:(Math.floor(Math.random()*4))},
+					  {life:(Math.floor(Math.random()*4))},
+					 {life:(Math.floor(Math.random()*4))},
+					 {life:(Math.floor(Math.random()*4))}],
+					[{life:(Math.floor(Math.random()*4))},
+					 {life:(Math.floor(Math.random()*4))},
+					  {life:(Math.floor(Math.random()*4))},
+					 {life:(Math.floor(Math.random()*4))},
+					 {life:(Math.floor(Math.random()*4))}]
+					];
+					
+					for(var i = 0; i < stages.length; i++){
+						$('#stage').append('<div class="separator linea'+i+'">');
+						for(var j = 0; j < stages[i].length; j++){
+							if(stages[i][j].life == 1){
+							$('.separator.linea'+i).append('<div class="block lifes1"></div>');
+							}
+							if(stages[i][j].life == 2){
+							$('.separator.linea'+i).append('<div class="block lifes2"></div>');
+							}
+							if(stages[i][j].life == 3){
+							$('.separator.linea'+i).append('<div class="block lifes3"></div>');
+							}
+							if(stages[i][j].life == 0){
+							$('.separator.linea'+i).append('<div class="block lifes0"></div>');
+							}
+						}
+						
+					}
+
+	</script>
+	<script language="JavaScript" type="text/JavaScript">
+	player = document.getElementById("player");
+	var Widthplayer = player.offsetWidth;
+	stage = document.getElementById("stage");
+	document.onkeydown = function mover(tecla){
+	var posicion = player.offsetLeft;
+	var right = stage.offsetWidth - player.offsetWidth;
+
+	if((tecla.keyCode == 37 )&&(posicion > stage.style.left)){
+		 player.style.left = (posicion-50)+"px";
+	}
+	if((tecla.keyCode == 39) &&(posicion < right)){
+		 player.style.left = (posicion+50)+"px";
+	}
+	if((tecla.keyCode == 32 )){
+		clearInterval(idSetIntervalsolo);
+		window.onload= iniciar();
+		
+		 }
+	
+	}
+
+</script>
+
+<script language="JavaScript" type="text/JavaScript">
+       
+	   var controlY= 0;
+        var controlX=0;
+        var x=475;
+		var y=500;
+        var velocidad=5;
+        var idSetInterval=0;
+		
+		
+		function iniciar(){
+			if(idSetInterval==0){
+            idSetInterval=setInterval("mover()",10);
+			}
+		}
+			    function mover(){
+			if(y>=player.offsetTop-25 && x >=player.offsetLeft && x <=player.offsetLeft+Widthplayer){
+                controlY=0;
+            }
+				
+		if(controlY==1){
+                y+=velocidad;
+            }else{
+                y-=velocidad;
+            }
+            if(y<0){
+                controlY=1;
+                y=velocidad;
+            }else if(y>=stage.offsetHeight-22){
+                controlY=0;
+				alert("GameOver");
+				document.location.reload();
+                y= stage.offsetHeight-22;
+            }
+		    
+
+            if(controlX==1){
+                x+=velocidad;
+				
+            }else{
+                x-=velocidad;
+				
+            }
+            if(x<0){
+                controlX=1;
+                x=velocidad;
+            }else if(x >= stage.offsetWidth-22){
+                controlX=0;
+                x=stage.offsetWidth-22;
+            }	
+		    ball.style.left=String(x)+"px";
+            ball.style.top=String(y)+"px";	
+		}
+		
+</script>
+<script language="JavaScript" type="text/JavaScript">
+       
+	   var controlY= 0;
+        var controlX=0;
+        var x=475;
+		var y=500;
+        var velocidad=5;
+        var idSetInterval=0;
+		
+		
+		function iniciarsolo(){
+			if(idSetInterval==0){
+            idSetIntervalsolo=setInterval("moversolo()",10);
+			}
+		}
+			    function moversolo(){
+			if(y>=player.offsetTop-25 && x >=player.offsetLeft && x <=player.offsetLeft+Widthplayer){
+                controlY=0;
+            }
+				
+		if(controlY==1){
+                y+=velocidad;
+            }else{
+                y-=velocidad;
+            }
+            if(y<0){
+                controlY=1;
+                y=velocidad;
+            }else if(y>=stage.offsetHeight-22){
+                controlY=0;
+				alert("GameOver");
+				document.location.reload();
+                y= stage.offsetHeight-22;
+            }
+		    
+
+            if(controlX==1){
+                x+=velocidad;
+				if((player.offsetLeft + player.offsetWidth) < stage.offsetWidth){
+				player.style.left = String(x)+"px";
+				}
+            }else{
+                x-=velocidad;
+				if(player.offsetLeft  >= ball.offsetLeft){
+				player.style.left = String(x)+"px";
+				}
+           }
+            if(x<0){
+                controlX=1;
+                x=velocidad;
+            }else if(x >= stage.offsetWidth-22){
+                controlX=0;
+                x=stage.offsetWidth-22;
+            }	
+		    ball.style.left=String(x)+"px";
+            ball.style.top=String(y)+"px";	
+		}
+		window.onload= iniciarsolo();
+		
+</script>
+  </body>
+</html>
